@@ -1,0 +1,13 @@
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\bin\Debug\netcoreapp3.1\FMVCSProject.exe
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\bin\Debug\netcoreapp3.1\FMVCSProject.deps.json
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\bin\Debug\netcoreapp3.1\FMVCSProject.runtimeconfig.json
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\bin\Debug\netcoreapp3.1\FMVCSProject.runtimeconfig.dev.json
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\bin\Debug\netcoreapp3.1\FMVCSProject.dll
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\bin\Debug\netcoreapp3.1\FMVCSProject.pdb
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.csprojAssemblyReference.cache
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.AssemblyInfoInputs.cache
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.AssemblyInfo.cs
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.csproj.CoreCompileInputs.cache
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.dll
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.pdb
+C:\Users\marin\source\repos\FMVCSProject\FMVCSProject\obj\Debug\netcoreapp3.1\FMVCSProject.genruntimeconfig.cache
