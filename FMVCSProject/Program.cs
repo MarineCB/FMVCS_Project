@@ -25,7 +25,7 @@ namespace FMVCSProject
 			new Patient(service);*/
 
 			string input = "";
-			Console.WriteLine("COMMANDS :\n New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \n New Patient / [Name of the service] \n Call Provider [Name of the service] \n Share Room [Name of the service] \n Share Physicians [Name of the service] \n Exit");
+			Console.WriteLine("COMMANDS: \nNew Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \nNew Patient / [Name of the service] \nRequest Room / [Name of the service] \nRequest Physician / [Name of the service] \nShare Room / [Name of the service] \nShare Physicians / [Name of the service] \nExit");
 			EmergencyCareService s;
 			string name;
 			int nbNurse, nbRoom, nbPhysician;
@@ -56,7 +56,7 @@ namespace FMVCSProject
 							break;
 						}
 						services.Add(new EmergencyCareService(name, provider, nbNurse, nbRoom, nbPhysician));
-                        Console.WriteLine("Serive \""+name+"\" created");
+                        Console.WriteLine("Service \""+name+"\" created");
 						break;
 					case "new patient": // new patient /s1 (s1 nom du service ou arrive le patient)
 						if(inputs.Length >=2)
@@ -121,7 +121,7 @@ namespace FMVCSProject
 							service.SharePhysician();
 						break;
 					case "list commands":
-						Console.WriteLine("New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \nNew Patient / [Name of the service] \nRequest Room [Name of the service] \nRequest Physician [Name of the service] \nShare Room [Name of the service] \nShare Physicians [Name of the service] \nExit");
+						Console.WriteLine("New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \nNew Patient / [Name of the service] \nRequest Room / [Name of the service] \nRequest Physician / [Name of the service] \nShare Room / [Name of the service] \nShare Physicians / [Name of the service] \nExit");
 						break;
 					case "exit":
 						break;
