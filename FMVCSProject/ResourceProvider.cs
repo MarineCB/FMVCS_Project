@@ -24,32 +24,43 @@ namespace FMVCSProject
 			this.physicianNb = physicianNb;
 		}
 
-		public bool ShareResources()
-		{
-			Console.WriteLine("PROVIDER: receiving resource request");
+        public bool SharePhysician()
+        {
+            Console.WriteLine("PROVIDER: receiving physician request");
 
-			lock (roomLock)
-			{
-				if (roomNb <= 0)
-					return false;
-				lock (physicianLock)
-				{
-					if (physicianNb <= 0)
-						return false;
-					this.Rooms.WaitOne();
-					this.Physicians.WaitOne();
-					Console.WriteLine("PROVIDER: giving 1 room and 1 physician");
-					this.roomNb--;
-					this.physicianNb--;
-					Console.WriteLine("PROVIDER:\nTotal number of physician: " + this.physicianNb + "\nTotal number of rooms: " + this.roomNb);
-				}
-			}
-			Thread.Sleep(1000);
-			return true;
+            lock (physicianLock)
+            {
+                if (physicianNb <= 0)
+                    return false;
+                this.Physicians.WaitOne();
+                Console.WriteLine("PROVIDER: giving 1 physician");
+                this.physicianNb--;
+                Console.WriteLine("PROVIDER:\nTotal number of physician: " + this.physicianNb);
+            }
+            Thread.Sleep(1000);
+            return true;
+        }
 
-		}
+        public bool ShareRoom()
+        {
+            Console.WriteLine("PROVIDER: receiving room request");
 
-		public void ReceiveRoom()
+            lock (roomLock)
+            {
+                if (roomNb <= 0)
+                    return false;
+                this.Rooms.WaitOne();
+                Console.WriteLine("PROVIDER: giving 1 room and 1 physician");
+                this.roomNb--;
+                Console.WriteLine("PROVIDER:\nTotal number of rooms: " + this.roomNb);
+
+            }
+            Thread.Sleep(1000);
+            return true;
+        }
+
+
+        public void ReceiveRoom()
 		{
 			this.Rooms.Release();
 			lock (roomLock)

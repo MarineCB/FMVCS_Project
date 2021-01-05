@@ -13,6 +13,7 @@ namespace FMVCSProject
 			List<EmergencyCareService> services = new List<EmergencyCareService>();
 			EmergencyCareService service = new EmergencyCareService("s1",provider, 2, 4, 3);
 			services.Add(service);
+
 			/*new Patient(service);
 			Thread.Sleep(200);
 			new Patient(service);
@@ -41,7 +42,7 @@ namespace FMVCSProject
 
 				switch (inputs[0])
 				{
-					case "new service": //add un service type "new service / s1 ajouter dans un dict ???
+					case "new service":
 						if (inputs.Length >= 5)
 						{
 							name = inputs[1];
@@ -71,7 +72,7 @@ namespace FMVCSProject
 						else
                             Console.WriteLine("This service does not exist");
 						break;
-					case "call provider":
+					case "request room":
 						if (inputs.Length >= 2)
 							name = inputs[1];
 						else
@@ -81,7 +82,19 @@ namespace FMVCSProject
 						}
 						 s = services.Find(s => s.Name.ToLower().Equals(name));
 						if (s != null)
-							s.CallProvider();
+							s.RequestRoom();
+						break;
+					case "request physician":
+						if (inputs.Length >= 2)
+							name = inputs[1];
+						else
+						{
+							Console.WriteLine("Invalid number of argument");
+							break;
+						}
+						s = services.Find(s => s.Name.ToLower().Equals(name));
+						if (s != null)
+							s.RequestPhysician();
 						break;
 					case "share room":
 						if (inputs.Length >= 2)
@@ -108,7 +121,7 @@ namespace FMVCSProject
 							service.SharePhysician();
 						break;
 					case "list commands":
-						Console.WriteLine("New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \nNew Patient / [Name of the service] \nCall Provider [Name of the service] \nShare Room [Name of the service] \nShare Physicians [Name of the service] \nExit");
+						Console.WriteLine("New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \nNew Patient / [Name of the service] \nRequest Room [Name of the service] \nRequest Physician [Name of the service] \nShare Room [Name of the service] \nShare Physicians [Name of the service] \nExit");
 						break;
 					case "exit":
 						break;
