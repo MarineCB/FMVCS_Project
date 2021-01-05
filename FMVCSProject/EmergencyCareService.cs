@@ -7,7 +7,17 @@ namespace FMVCSProject
 {
 	public class EmergencyCareService
 	{
-		private static int MAX_RESOURCE_NUMBER = 100;
+		private readonly object nameLock = new object();
+		private string name;
+		public string Name { 
+			get {
+                lock (nameLock)
+                {
+					return name;
+                }
+			}
+			private set { name = value; } }
+        private static int MAX_RESOURCE_NUMBER = 100;
 
 		private ResourceProvider provider;
 		public Semaphore Receptionist { get; private set; }
@@ -27,8 +37,9 @@ namespace FMVCSProject
 
 		public Mutex ResourceRequest { get; private set; }
 
-		public EmergencyCareService(ResourceProvider provider, int availableNurses, int availableRooms, int availablePhysicians)
+		public EmergencyCareService(String name,ResourceProvider provider, int availableNurses, int availableRooms, int availablePhysicians)
 		{
+			this.Name = name;
 			this.provider = provider;
 			this.Receptionist = new Semaphore(1, 1);
 			this.Nurses = new Semaphore(availableNurses, availableNurses);
@@ -39,15 +50,23 @@ namespace FMVCSProject
 			this.physicianNb = availablePhysicians;
 			//Only one request at a time
 			this.ResourceRequest = new Mutex();
+
+			Thread t1 = new Thread(new ThreadStart(Run));
+			t1.Start();
 		}
 
-		public int AcceptPatient()
+		public void Run()
+        {
+            while (true) { }
+        }
+		public string AcceptPatient()
 		{
 			lock (patientLock)
 			{
 				this.acceptedPatient++;
-				Console.WriteLine("----- " + this.acceptedPatient + " patients -----");
-				return this.acceptedPatient;
+				Console.WriteLine(this.Name + " ----- " + this.acceptedPatient + " patients -----");
+				string id = this.acceptedPatient.ToString() + this.Name;
+				return id;
 			}
 		}
 
@@ -56,15 +75,15 @@ namespace FMVCSProject
 			lock (patientLock)
 			{
 				this.acceptedPatient--;
-				Console.WriteLine("----- "+this.acceptedPatient+" patients -----");
+				Console.WriteLine(this.Name + " ----- " + this.acceptedPatient+" patients -----");
 			}
 		}
 
-		public int CalculWaitingTime()
+		public string CalculWaitingTime()
 		{
 			int waitingTime = new Random().Next(7);
 			if (waitingTime >= 6)
-				return -1;
+				return "-1";
 			else
 				return AcceptPatient();
 		}
@@ -76,7 +95,7 @@ namespace FMVCSProject
 			//call provider which will check if it can give
 			if (!this.provider.ShareResources())
 			{
-				Console.WriteLine("Oops... Provider has no resource available for now");
+				Console.WriteLine(this.Name + " : Oops... Provider has no resource available for now");
 				return;
 			}
 			lock (roomLock)
@@ -85,7 +104,7 @@ namespace FMVCSProject
 				lock (physicianLock)
 				{
 					this.physicianNb++;
-					Console.WriteLine("SERVICE:\nTotal number of physician: "+this.physicianNb+ "\nTotal number of rooms: " + this.roomNb);
+					Console.WriteLine(this.Name + " : \nTotal number of physician: " + this.physicianNb+ "\nTotal number of rooms: " + this.roomNb);
 				}
 			}
 			this.Rooms.Release();
@@ -99,7 +118,7 @@ namespace FMVCSProject
 			{
 				if (acceptedPatient > 0)
 				{
-					Console.WriteLine("Oops... who cannot share a room when you have patient in the service");
+					Console.WriteLine(this.Name + " : Oops... who cannot share a room when you have patient in the service");
 					return;
 				}
 			}
@@ -107,14 +126,14 @@ namespace FMVCSProject
 			{
 				if(roomNb <= 0)
 				{
-					Console.WriteLine("Oops... you have no available room for now, maybe you should call the provider");
+					Console.WriteLine(this.Name + " : Oops... you have no available room for now, maybe you should call the provider");
 					return;
 				}
 
 				Rooms.WaitOne();
 				this.provider.ReceiveRoom();
 				this.roomNb--;
-				Console.WriteLine("SERVICE: Total number of rooms: " + this.roomNb);
+				Console.WriteLine(this.Name + " : \n Total number of rooms: " + this.roomNb);
 			}
 		}
 
@@ -124,7 +143,7 @@ namespace FMVCSProject
 			{
 				if (acceptedPatient > 0)
 				{
-					Console.WriteLine("Oops... who cannot share a physician when you have patient in the service");
+					Console.WriteLine(this.Name + " : Oops... who cannot share a physician when you have patient in the service");
 					return;
 				}
 			}
@@ -132,13 +151,13 @@ namespace FMVCSProject
 			{
 				if (physicianNb <= 0)
 				{
-					Console.WriteLine("Oops... you have no available physician for now, maybe you should call the provider");
+					Console.WriteLine(this.Name + " : Oops... you have no available physician for now, maybe you should call the provider");
 					return;
 				}
 				Physicians.WaitOne();
 				this.provider.ReceivePhysician();
 				this.physicianNb--;
-				Console.WriteLine("SERVICE: Total number of physician: " + this.physicianNb);
+				Console.WriteLine(this.Name + " : \nTotal number of physician: " + this.physicianNb);
 			}
 		}
 	}

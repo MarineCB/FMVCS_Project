@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace FMVCSProject
@@ -9,7 +10,9 @@ namespace FMVCSProject
 		{
 			Console.WriteLine("--- START ---\n");
 			ResourceProvider provider = new ResourceProvider(2, 1);
-			EmergencyCareService service = new EmergencyCareService(provider, 2, 4, 3);
+			List<EmergencyCareService> services = new List<EmergencyCareService>();
+			EmergencyCareService service = new EmergencyCareService("s1",provider, 2, 4, 3);
+			services.Add(service);
 			/*new Patient(service);
 			Thread.Sleep(200);
 			new Patient(service);
@@ -21,33 +24,91 @@ namespace FMVCSProject
 			new Patient(service);*/
 
 			string input = "";
-
+			Console.WriteLine("COMMANDS :\n New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \n New Patient / [Name of the service] \n Call Provider [Name of the service] \n Share Room [Name of the service] \n Share Physicians [Name of the service] \n Exit");
+			EmergencyCareService s;
+			string name;
+			int nbNurse, nbRoom, nbPhysician;
 			while (!input.Equals("exit"))
 			{
 				input = Console.ReadLine().ToLower().Trim();
-				switch (input)
+				string[] inputs = input.Split('/');
+                for(int i =0; i<inputs.Length; i++)
+                {
+					inputs[i] = inputs[i].Trim();
+                }
+
+
+
+				switch (inputs[0])
 				{
-					/*case "": //add un service type "new service / s1 ajouter dans un dict ???
-						Console.Write("Recipient login : ");
-						String recipient = Console.ReadLine();
-						Console.Write("Message content : ");
-						String content = Console.ReadLine();
-						Net.SendMsg(client.GetStream(), input + "\n" + recipient + "\n" + content);
-						break;*/
+					case "new service": //add un service type "new service / s1 ajouter dans un dict ???
+						if (inputs.Length >= 5)
+						{
+							name = inputs[1];
+							nbNurse = Int32.Parse(inputs[2]);
+							nbRoom = Int32.Parse(inputs[3]);
+							nbPhysician = Int32.Parse(inputs[4]);
+						}
+						else
+						{
+							Console.WriteLine("Invalid number of argument");
+							break;
+						}
+						services.Add(new EmergencyCareService(name, provider, nbNurse, nbRoom, nbPhysician));
+                        Console.WriteLine("Serive \""+name+"\" created");
+						break;
 					case "new patient": // new patient /s1 (s1 nom du service ou arrive le patient)
-						new Patient(service);
+						if(inputs.Length >=2)
+							name = inputs[1];
+                        else
+                        {
+							Console.WriteLine("Invalid number of argument");
+							break;
+                        }
+						s = services.Find(s => s.Name.ToLower().Equals(name));
+						if (s != null)
+							new Patient(s);
+						else
+                            Console.WriteLine("This service does not exist");
 						break;
 					case "call provider":
-						service.CallProvider();
+						if (inputs.Length >= 2)
+							name = inputs[1];
+						else
+						{
+							Console.WriteLine("Invalid number of argument");
+							break;
+						}
+						 s = services.Find(s => s.Name.ToLower().Equals(name));
+						if (s != null)
+							s.CallProvider();
 						break;
 					case "share room":
-						service.ShareRoom();
+						if (inputs.Length >= 2)
+							name = inputs[1];
+						else
+						{
+							Console.WriteLine("Invalid number of argument");
+							break;
+						}
+						s = services.Find(s => s.Name.ToLower().Equals(name));
+						if (s != null)
+							service.ShareRoom();
 						break;
 					case "share physician":
-						service.SharePhysician();
+						if (inputs.Length >= 2)
+							name = inputs[1];
+						else
+						{
+							Console.WriteLine("Invalid number of argument");
+							break;
+						}
+						s = services.Find(s => s.Name.ToLower().Equals(name));
+						if (s != null)
+							service.SharePhysician();
 						break;
 					case "list commands":
-						Console.WriteLine("New Patient | Call Provider | Share Room | Share Physicians | Exit");
+						Console.WriteLine("New Service / [Name of the Service] / [Nb of Nurse] / [Nb of Room] / [Nb of Physician] \nNew Patient / [Name of the service] \nCall Provider [Name of the service] \nShare Room [Name of the service] \nShare Physicians [Name of the service] \nExit");
 						break;
 					case "exit":
 						break;

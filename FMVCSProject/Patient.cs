@@ -8,7 +8,7 @@ namespace FMVCSProject
 	public class Patient
 	{
 		private EmergencyCareService Service;
-		private int id;
+		private string id;
 		public Patient (EmergencyCareService service)
 		{
 			this.Service = service;
@@ -18,8 +18,8 @@ namespace FMVCSProject
 
 		public void process()
 		{
-			int id = Checkin();
-			if (id == -1)
+			string id = Checkin();
+			if (id == "-1")
 			{
 				Console.WriteLine("Oops... waiting time too long (patient refused)");
 				return;
@@ -82,11 +82,11 @@ namespace FMVCSProject
 			Console.WriteLine("P"+this.id + ": paper filled");
 		}
 
-		private int Checkin()
+		private string Checkin()
 		{
 			this.Service.Receptionist.WaitOne();
 			Console.WriteLine("Patient checking in...");
-			int id = this.Service.CalculWaitingTime();
+			string id = this.Service.CalculWaitingTime();
 			Thread.Sleep(2000);
 			// call service to process id and waiting time (if waiting time too high id = -1)
 			this.Service.Receptionist.Release();
